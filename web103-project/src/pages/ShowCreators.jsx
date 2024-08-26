@@ -1,7 +1,7 @@
-import { supabase } from "../client";
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Card from "../components/Card";
+import { supabase } from '../client';
+import Card from '../components/card';
 
 function ShowCreators() {
   const [creators, setCreators] = useState([]);
@@ -11,22 +11,30 @@ function ShowCreators() {
   }, []); // Add an empty dependency array to avoid infinite loops
 
   async function getCreators() {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('creators')
       .select('*');
-    setCreators(data); // Update state with fetched data
+    if (error) {
+      console.error('Error fetching creators:', error);
+    } else {
+      setCreators(data); // Update state with fetched data
+    }
   }
 
   return (
     <div>
+      <h1>Content Creators</h1>
+      <Link to="/add">
+        <button className="add-creator-button">Add New Creator</button>
+      </Link>
       {creators.length > 0 ? (
         creators.map((creator) => (
-          <Link to={`/creator/${creator.id}`} key={creator.id}> {/* Link to the individual creator page */}
+          <Link to={`/creator/${creator.id}`} key={creator.id}>
             <Card
               name={creator.name}
               url={creator.url}
               description={creator.description}
-              imageURL={creator.image_url}
+              imageURL={creator.imageURL}
             />
           </Link>
         ))
@@ -38,3 +46,4 @@ function ShowCreators() {
 }
 
 export default ShowCreators;
+

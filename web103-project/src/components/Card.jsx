@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './card.css'; 
+import './Card.css'; 
 
 const Card = ({ name, url, description, imageURL }) => {
   return (
